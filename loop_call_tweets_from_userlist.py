@@ -15,12 +15,12 @@ from datetime import date
 from datetime import datetime
 
 #set path variables, use two directories for easier data manipulation and extraction
-tdir = "tweets_polit/" #set tweets directory
-mdir = "meta_polit/"   #set meta directory
+tdir = "tweets_DIR/" #set tweets directory
+mdir = "meta_DIR/"   #set meta directory
 
 # Get user IDs from list (text file, one ID per line)
 def get_usernames():
-  with open('polit_user_ids_all.txt', 'r') as targets_file:
+  with open('list.txt', 'r') as targets_file:   # pulled from working directory
      targets_list = targets_file.readlines()
   usernames = [] 
   for item in targets_list:
@@ -31,8 +31,8 @@ def get_usernames():
 
 # Set your BEARER Token (from Twitter API 2.0)
 def auth():
-    bearer_token = "AAAAAAAAAAAAAAAAAAAAAL3kHwEAAAAAqc4%2BGCb4lPf2%2FE7qSt4DiChH80s%3DiO4zhzsSyg7Cw9kapbkdHlsKbzbqV4JBHFTAk8rIsbdLeUmfVO"
-    # return os.environ.get('BEARER_TOKEN')
+    bearer_token = "YOUR BEARER TOKEN"
+    # return os.environ.get('BEARER_TOKEN') # in case you have set your Bearer Token in your environment
     return bearer_token
 
 
@@ -90,7 +90,6 @@ def get_the_tweets(item):
   tweets_meta = []
   
   last_id = ""    # first call of tweets this needs to be empty (unless you want to start with older tweets)
-  # result_count = 100
   i = 0           # Counting the loops
   
   # get all parameters
@@ -102,7 +101,7 @@ def get_the_tweets(item):
   new_tweets = connect_to_endpoint(url, headers)
 
   print "\n***LOOP for ***: {}".format(item)
-  # make results pretty
+  # make results pretty --> not really needed here. Can be used to check results :)
   nt, trash = make_json_output(new_tweets['data'])        # 2nd value (trash) not needed from this function
   mt, trash = make_json_output(new_tweets['meta'])        # 2nd value (trash) not needed from this function
   inc, trash = make_json_output(new_tweets['includes'])   # 2nd value (trash) not needed from this function
@@ -115,10 +114,12 @@ def get_the_tweets(item):
   
   print "\n***OLDEST***: \nCount: {}\nToken: {}\nLast ID: {}".format(result_count, token, last_id)
 
+  # append data to list
   alltweets.append(new_tweets['data'])
   tweets_meta = new_tweets['meta']
   tweets_inc = new_tweets['includes']
   
+  # write json data
   mfjson, mfjson_meta, mfjson_tweets_meta, mftxt, mfcsv, mfcsv_meta, mfcsv_tweets_meta, name_only = export_files(item)
   ugly, pretty = make_json_output(new_tweets['data'])
   print_routine_json((name_only + "-" + str(i) + ".json"), pretty)
@@ -141,11 +142,9 @@ def get_the_tweets(item):
     # get all new tweets (max. number is 100 tweets with the set poarameters)
     new_tweets = connect_to_endpoint(url, headers)
     
-    #print "\n***LOOP for ***: {}".format(item)
     print "\n***LOOP for***{}, loop no. {}".format(item,i)
-    # print new_tweets
     
-    # make results pretty
+    # make results pretty --> not really needed here. Can be used to check results :)
     nt, trash = make_json_output(new_tweets['data'])        # 2nd value (trash) not needed from this function
     mt, trash = make_json_output(new_tweets['meta'])        # 2nd value (trash) not needed from this function
     inc, trash = make_json_output(new_tweets['includes'])   # 2nd value (trash) not needed from this function
@@ -157,10 +156,12 @@ def get_the_tweets(item):
   
     print "\n***OLDEST***: \nCount: {}\nToken: {}\nLast ID: {}".format(result_count, token, last_id)
 
+    # write json data
     mfjson, mfjson_meta, mfjson_tweets_meta, mftxt, mfcsv, mfcsv_meta, mfcsv_tweets_meta, name_only = export_files(item)
     ugly, pretty = make_json_output(new_tweets['data'])
     print_routine_json((name_only + "-" + str(i) + ".json"), pretty)
-    
+
+    # append data to list
     alltweets.append(new_tweets['data'])
     tweets_meta = new_tweets['meta']
     tweets_inc = new_tweets['includes']
@@ -266,13 +267,13 @@ def main():
     ugly_meta, pretty_meta = make_json_output(json_response_meta)
     # ugly_tweets_meta, pretty_tweets_meta = make_json_output(tweets_meta) #list indices must be integers, not str
     
-    # write JSON files
+    # write JSON files from metaURL. All other data from tweets written with function get_the_tweets
     # print_routine_json(mfjson, pretty)
     print_routine_json(mfjson_meta, pretty_meta)
     # write last meta json to file. Note needed for further processing.
     # print_routine_json(mfjson_tweets_meta, pretty_tweets_meta)
 
-    # write CSV files
+    # write CSV files - done with R script
     # print_routine_csv(mfcsv, alltweets[0])
     # print_routine_csv(mfcsv_meta,json_response_meta)
     # print_routine_csv(mfcsv, ugly)
@@ -284,11 +285,3 @@ def main():
   
 if __name__ == "__main__":
     main()
-
-
-# if __name__ == '__main__':
-#     #pass in the username of the account you want to download
-#     for idx, item in enumerate(usernames):
-#         # get_all_tweets(x)
-#         print(idx, item)
-# 	      #print (outtweets)
