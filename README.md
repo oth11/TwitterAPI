@@ -1,10 +1,15 @@
 # TwitterAPI
-Use to get Twitter Data via API. Python and R scripts.
+Use to get Twitter Data via API. Python script.
 
 
-mit loop_call_tweets (python) starten: definition der user ids in Textdatei
+loop_call_tweets (python):
+
+change your directories where to write tweet and meta files
+change to your own list of id's (list.txt used as example)
+add your BEARER token for Twitter API
 
 
+  
 //
 mit json2csv R können JSON Roh-Dateien einzeln (!) in CSV umgewandelt werden (funktioniert)
 //
