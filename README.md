@@ -1,5 +1,5 @@
 # TwitterAPI
-Use to get Twitter Data via API. Python script.
+Use to get Twitter Data via API. Python and R scripts.
 
 
 loop_call_tweets (python):
