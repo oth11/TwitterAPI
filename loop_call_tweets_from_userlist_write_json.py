@@ -15,7 +15,7 @@ mdir = "YOUROWNDIRECTORY/"    #set meta directory
 
 # Get user IDs from list (text file, one ID per line)
 def get_usernames():
-  with open('LISTFILE', 'r') as targets_file:   #textfile holding the twitter ids to check
+  with open('list.txt', 'r') as targets_file:   #textfile holding the twitter ids to check
      targets_list = targets_file.readlines()
   usernames = [] 
   for item in targets_list:
